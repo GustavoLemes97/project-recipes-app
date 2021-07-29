@@ -1,12 +1,13 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Login from './Pages/Login';
+import Comidas from './Pages/Comidas';
 
 function App() {
   return (
     <Switch>
       <Route exact path="/" component={ Login } />
-      <Route path="/comidas" />
+      <Route path="/comidas" component={ Comidas } />
       <Route path="/bebidas" />
       <Route path="/comidas/:id-da-receita" />
       <Route path="/bebidas/:id-da-receita" />

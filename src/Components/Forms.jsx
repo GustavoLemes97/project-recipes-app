@@ -10,14 +10,18 @@ function Forms() {
     if (/^\w+@\w+.com(.br)?$/.test(email) && password.length > five) {
       setDisabled(false)
     }
-    localStorage.setItem('mealsToken', 1)
-    localStorage.setItem('cocktailsToken', 1)
   }
 
   const changeInput = ({ target: { name, value } }) => {
     if (name === 'email') setEmail(value)
     if (name === 'password') setPassword(value)
     btnDisabled()
+  }
+
+  const buttonClick = () => {
+    localStorage.setItem('mealsToken', 1)
+    localStorage.setItem('cocktailsToken', 1)
+    localStorage.setItem('user', JSON.stringify({ email }))
   }
 
   return (
@@ -36,7 +40,12 @@ function Forms() {
         data-testid="password-input"
         onChange={changeInput}
       />
-      <button disabled={disabled} type="button" data-testid="login-submit-btn">
+      <button
+        disabled={disabled}
+        onClick={buttonClick}
+        type="button"
+        data-testid="login-submit-btn"
+      >
         Entrar
       </button>
     </>

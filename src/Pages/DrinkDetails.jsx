@@ -1,8 +1,7 @@
 import React from 'react';
 
 function DrinkDetails() {
-  return (
-    <div />);
+  return <div />;
 }
 
 export default DrinkDetails;

@@ -36,8 +36,9 @@ function Food() {
       const response = await fetch(
         `https://www.themealdb.com/api/json/v1/1/filter.php?c=${meal}`,
       );
+      const twelve = 12;
       const json = await response.json();
-      const filtered = json.meals.filter((_, index) => index < 12);
+      const filtered = json.meals.filter((_, index) => index < twelve);
       setData(filtered);
     }
 

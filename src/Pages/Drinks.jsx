@@ -35,8 +35,9 @@ function Drinks() {
       const response = await fetch(
         `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${drink}`,
       );
+      const twelve = 12;
       const json = await response.json();
-      const filtered = json.drinks.filter((_, index) => index < 12);
+      const filtered = json.drinks.filter((_, index) => index < twelve);
       setData(filtered);
     }
 

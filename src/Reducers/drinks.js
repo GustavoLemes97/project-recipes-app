@@ -7,7 +7,7 @@ import {
 const INITIAL_STATE = {
   drinks: [],
   isLoading: false,
-  error:'',
+  error: '',
 };
 
 function drinks(state = INITIAL_STATE, { type, payload }) {
@@ -26,8 +26,8 @@ function drinks(state = INITIAL_STATE, { type, payload }) {
   case REQUEST_COCK_TAILS_API_ERROR:
     return {
       ...state,
-        isLoading: false,
-        error: payload,
+      isLoading: false,
+      error: payload,
     };
   default:
     return state;

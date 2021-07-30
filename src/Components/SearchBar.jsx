@@ -11,7 +11,7 @@ function SearchBar() {
       <label htmlFor="">
         Nome
         <input data-testid="name-search-radio" type="radio" />
-      </label>   
+      </label>
       <label htmlFor="">
         Primeira Letra
         <input data-testid="first-letter-search-radio" type="radio" />

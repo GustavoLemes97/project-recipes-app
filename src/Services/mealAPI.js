@@ -2,7 +2,7 @@ const MEALS_FILTER_API = 'https://www.themealdb.com/api/json/v1/1/filter.php?i='
 const MEALS_NAME_API = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
 const MEALS_FIRST_LETTER_API = 'https://www.themealdb.com/api/json/v1/1/search.php?f=';
 
-const getMealsDataByFilter = (ingredient) => (
+export const getMealsDataByFilter = (ingredient) => (
   fetch(`${MEALS_FILTER_API}${ingredient}`)
     .then((response) => (
       response
@@ -11,7 +11,7 @@ const getMealsDataByFilter = (ingredient) => (
     ))
 );
 
-const getMealsDataByName = (name) => (
+export const getMealsDataByName = (name) => (
   fetch(`${MEALS_NAME_API}${name}`)
     .then((response) => (
       response
@@ -20,7 +20,7 @@ const getMealsDataByName = (name) => (
     ))
 );
 
-const getMealsDataByFirstLetter = (firstLetter) => (
+export const getMealsDataByFirstLetter = (firstLetter) => (
   fetch(`${MEALS_FIRST_LETTER_API}${firstLetter}`)
     .then((response) => (
       response

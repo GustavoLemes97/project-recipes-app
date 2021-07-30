@@ -1,0 +1,5 @@
+.pages-footer {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+}

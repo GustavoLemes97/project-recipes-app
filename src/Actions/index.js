@@ -24,11 +24,11 @@ export const fetchMealsAPI = (callback, value) => async (dispatch) => {
   dispatch(requestMealsApi());
   try {
     const response = await callback(value);
-    dispatch(requestMealApiSuccess(response));
+    dispatch(requestMealApiSuccess(response.meals));
   } catch (errorMessage) {
     dispatch(requestMealApiError(errorMessage));
   }
-}
+};
 
 export const requestCockTailsApi = (payload) => ({
   type: REQUEST_COCK_TAILS_API,
@@ -49,8 +49,8 @@ export const fetchCockTailsAPI = (callback, value) => async (dispatch) => {
   dispatch(requestCockTailsApi());
   try {
     const response = await callback(value);
-    dispatch(requestCockTailsApiSuccess(response));
+    dispatch(requestCockTailsApiSuccess(response.drinks));
   } catch (errorMessage) {
     dispatch(requestCockTailsApiError(errorMessage));
   }
-}
+};

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function Forms() {
   const [email, setEmail] = useState('');
@@ -18,6 +19,12 @@ function Forms() {
     btnDisabled();
   };
 
+  const buttonClick = () => {
+    localStorage.setItem('mealsToken', 1);
+    localStorage.setItem('cocktailsToken', 1);
+    localStorage.setItem('user', JSON.stringify({ email }));
+  };
+
   return (
     <>
       <input
@@ -34,9 +41,16 @@ function Forms() {
         data-testid="password-input"
         onChange={ changeInput }
       />
-      <button disabled={ disabled } type="button" data-testid="login-submit-btn">
-        Entrar
-      </button>
+      <Link to="/comidas">
+        <button
+          disabled={ disabled }
+          onClick={ buttonClick }
+          type="button"
+          data-testid="login-submit-btn"
+        >
+          Entrar
+        </button>
+      </Link>
     </>
   );
 }

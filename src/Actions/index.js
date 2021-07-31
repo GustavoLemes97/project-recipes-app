@@ -4,6 +4,7 @@ export const REQUEST_MEALS_API_ERROR = 'REQUEST_MEALS_API_ERROR';
 export const REQUEST_COCK_TAILS_API = 'REQUEST_COCK_TAILS_API';
 export const REQUEST_COCK_TAILS_API_SUCCESS = 'REQUEST_COCK_TAILS_API_SUCCESS';
 export const REQUEST_COCK_TAILS_API_ERROR = 'REQUEST_COCK_TAILS_API_ERROR';
+export const REQUEST_COCK_TAILS_FILTERS = 'REQUEST_COCK_TAILS_FILTERS';
 
 export const requestMealsApi = (payload) => ({
   type: REQUEST_MEALS_API,
@@ -45,12 +46,18 @@ export const requestCockTailsApiError = (payload) => ({
   payload,
 });
 
+export const requestCockTailsFilters = (payload) => ({
+  type: REQUEST_COCK_TAILS_FILTERS,
+  payload,
+});
+
 export const fetchCockTailsAPI = (callback, value) => async (dispatch) => {
   dispatch(requestCockTailsApi());
-  try {
+  if (value === 'filters') {
+    const response = await callback();
+    dispatch(requestCockTailsFilters(response.drinks));
+  } else {
     const response = await callback(value);
     dispatch(requestCockTailsApiSuccess(response.drinks));
-  } catch (errorMessage) {
-    dispatch(requestCockTailsApiError(errorMessage));
   }
 };

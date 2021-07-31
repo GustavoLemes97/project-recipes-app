@@ -8,8 +8,10 @@ function Profile() {
 
   useEffect(() => {
     const userLocalStorage = localStorage.getItem('user');
-    const user = JSON.parse(userLocalStorage);
-    setEmail(user.email);
+    if (userLocalStorage) {
+      const user = JSON.parse(userLocalStorage);
+      setEmail(user.email);
+    }
   }, []);
 
   return (

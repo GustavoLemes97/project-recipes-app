@@ -15,14 +15,20 @@ function Header({ pageTitle, searchBtn }) {
         </Link>
         <h1 data-testid="page-title">{pageTitle}</h1>
         {searchBtn && (
-          <button type="button" onClick={ () => { showBar ? setShowBar(false) : setShowBar(true); } }>
-            <img data-testid="search-top-btn" alt="searchIcon" src={ SearchIcon } />
+          <button
+            type="button"
+            onClick={ () => (showBar ? setShowBar(false) : setShowBar(true)) }
+          >
+            <img
+              data-testid="search-top-btn"
+              alt="searchIcon"
+              src={ SearchIcon }
+            />
           </button>
         )}
       </nav>
       {showBar && <SearchBar />}
     </>
-
   );
 }
 

@@ -1,8 +1,15 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import Card from '../Components/Card';
+import { fetchMealsAPI } from '../Actions';
+import {
+  getMealsDefault,
+  getMealsFilters,
+  getMealsDataByName,
+} from '../Services/mealAPI';
 import '../css/Food.css';
 
 function Food() {
@@ -10,45 +17,34 @@ function Food() {
   const [filters, setFilters] = React.useState();
   const [selected, setSelected] = React.useState();
 
-  async function fetchFoods() {
-    const response = await fetch(
-      'https://www.themealdb.com/api/json/v1/1/search.php?s=',
-    );
-    const json = await response.json();
-    const twelve = 12;
-    const filteredFoods = json.meals.filter((_, index) => index < twelve);
-    setData(filteredFoods);
-  }
+  const dispatch = useDispatch();
+  const globalState = useSelector(({ foods }) => foods);
 
-  async function fetchFilters() {
-    const response = await fetch(
-      'https://www.themealdb.com/api/json/v1/1/list.php?c=list',
-    );
-    const json = await response.json();
-    const four = 4;
-    setFilters(json.meals.filter((_, index) => index <= four));
-  }
-
-  async function fetchMeal(meal) {
-    if (meal === selected) {
-      fetchFoods();
-    } else {
-      const response = await fetch(
-        `https://www.themealdb.com/api/json/v1/1/filter.php?c=${meal}`,
-      );
-      const twelve = 12;
-      const json = await response.json();
-      const filtered = json.meals.filter((_, index) => index < twelve);
-      setData(filtered);
-    }
-
-    setSelected(meal);
-  }
+  window.onload = function onLoad() {
+    dispatch(fetchMealsAPI(getMealsDefault));
+    dispatch(fetchMealsAPI(getMealsFilters, 'filters'));
+  };
 
   React.useEffect(() => {
-    fetchFoods();
-    fetchFilters();
-  }, []);
+    const twelve = 12;
+    const filteredMeals = globalState.foods.filter((_, idx) => idx < twelve);
+    setData(filteredMeals);
+  }, [globalState.foods]);
+
+  React.useEffect(() => {
+    const five = 5;
+    const filteredFilters = globalState.filters.filter((_, idx) => idx < five);
+    setFilters(filteredFilters);
+  }, [globalState.filters]);
+
+  function fetchMealsByCategory(strCategory) {
+    if (strCategory === selected) {
+      dispatch(fetchMealsAPI(getMealsDefault));
+    } else {
+      dispatch(fetchMealsAPI(getMealsDataByName, strCategory));
+      setSelected(strCategory);
+    }
+  }
 
   if (!data) return <p>Loading...</p>;
 
@@ -59,15 +55,15 @@ function Food() {
       <button
         data-testid="All-category-filter"
         type="button"
-        onClick={ () => fetchFoods() }
+        onClick={ () => dispatch(fetchMealsAPI(getMealsDefault)) }
       >
         All
       </button>
       {filters
-        && filters.map(({ strCategory }) => (
+        && filters.map(({ strCategory }, index) => (
           <button
-            onClick={ () => fetchMeal(strCategory) }
-            key={ strCategory }
+            onClick={ () => fetchMealsByCategory(strCategory) }
+            key={ index }
             type="submit"
             data-testid={ `${strCategory}-category-filter` }
           >

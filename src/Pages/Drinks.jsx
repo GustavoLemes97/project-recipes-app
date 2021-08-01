@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Header from '../Components/Header';
@@ -8,6 +8,7 @@ import { fetchCockTailsAPI } from '../Actions';
 import {
   getCockTailsDefault,
   getCockTailsFilters,
+  getCockTailsDataByName,
 } from '../Services/cockTailAPI';
 
 function Drinks() {
@@ -18,47 +19,32 @@ function Drinks() {
   const dispatch = useDispatch();
   const globalState = useSelector(({ drinks }) => drinks);
 
-  React.useEffect(() => {
+  window.onload = function onLoad() {
     dispatch(fetchCockTailsAPI(getCockTailsDefault));
     dispatch(fetchCockTailsAPI(getCockTailsFilters, 'filters'));
-  }, [dispatch]);
+  };
 
-  const setDrinksInData = useCallback(() => {
-    const twelve = 12;
-    const filteredDrinks = globalState.drinks.filter((_, index) => index < twelve);
-    setData(filteredDrinks);
-  }, [globalState.drinks]);
-
-  const setFiltersInData = useCallback(() => {
+  React.useEffect(() => {
     const five = 5;
-    const filterButtons = globalState.filters.filter((_, index) => index < five);
-    setFilters(filterButtons);
+    const filteredFilters = globalState.filters.filter((_, idx) => idx < five);
+    setFilters(filteredFilters);
   }, [globalState.filters]);
 
   React.useEffect(() => {
-    setDrinksInData();
-  }, [setDrinksInData]);
+    const twelve = 12;
+    const filteredDrinks = globalState.drinks.filter((_, idx) => idx < twelve);
+    setData(filteredDrinks);
+  }, [globalState.drinks]);
 
-  React.useEffect(() => {
-    setFiltersInData();
-  }, [setFiltersInData]);
+  function fetchDrinkByCategory(strCategory) {
+    if (strCategory === selected) {
+      dispatch(fetchCockTailsAPI(getCockTailsDefault));
+    } else {
+      dispatch(fetchCockTailsAPI(getCockTailsDataByName, strCategory));
+      setSelected(strCategory);
+    }
+  }
 
-  // async function fetchDrink(drink) {
-  //   if (drink === selected) {
-  //     fetchAPI();
-  //   } else {
-  //     const response = await fetch(
-  //       `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${drink}`,
-  //     );
-  //     const twelve = 12;
-  //     const json = await response.json();
-  //     const filtered = json.drinks.filter((_, index) => index < twelve);
-  //     setData(filtered);
-  //   }
-
-  //   setSelected(drink);
-  // }
-  console.log(globalState);
   if (!data) return <p>Loading...</p>;
 
   return (
@@ -68,14 +54,14 @@ function Drinks() {
       <button
         data-testid="All-category-filter"
         type="button"
-        onClick={ () => setDrinksInData() }
+        onClick={ () => dispatch(fetchCockTailsAPI(getCockTailsDefault)) }
       >
         All
       </button>
       {filters
         && filters.map(({ strCategory }) => (
           <button
-            // onClick={ () => fetchDrink(strCategory) }
+            onClick={ () => fetchDrinkByCategory(strCategory) }
             key={ strCategory }
             type="submit"
             data-testid={ `${strCategory}-category-filter` }

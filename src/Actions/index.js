@@ -1,6 +1,7 @@
 export const REQUEST_MEALS_API = 'REQUEST_MEALS_API';
 export const REQUEST_MEALS_API_SUCCESS = 'REQUEST_MEALS_API_SUCCESS';
 export const REQUEST_MEALS_API_ERROR = 'REQUEST_MEALS_API_ERROR';
+export const REQUEST_MEALS_FILTERS = 'REQUEST_MEALS_FILTERS';
 export const REQUEST_COCK_TAILS_API = 'REQUEST_COCK_TAILS_API';
 export const REQUEST_COCK_TAILS_API_SUCCESS = 'REQUEST_COCK_TAILS_API_SUCCESS';
 export const REQUEST_COCK_TAILS_API_ERROR = 'REQUEST_COCK_TAILS_API_ERROR';
@@ -21,13 +22,23 @@ export const requestMealApiError = (payload) => ({
   payload,
 });
 
+export const requestMealsFilters = (payload) => ({
+  type: REQUEST_MEALS_FILTERS,
+  payload,
+});
+
 export const fetchMealsAPI = (callback, value) => async (dispatch) => {
   dispatch(requestMealsApi());
-  try {
-    const response = await callback(value);
-    dispatch(requestMealApiSuccess(response.meals));
-  } catch (errorMessage) {
-    dispatch(requestMealApiError(errorMessage));
+  if (value === 'filters') {
+    const response = await callback();
+    dispatch(requestMealsFilters(response.meals));
+  } else {
+    try {
+      const response = await callback(value);
+      dispatch(requestMealApiSuccess(response.meals));
+    } catch (errorMessage) {
+      dispatch(requestMealApiError(errorMessage));
+    }
   }
 };
 
@@ -51,13 +62,18 @@ export const requestCockTailsFilters = (payload) => ({
   payload,
 });
 
+//  CONDICIONAL
 export const fetchCockTailsAPI = (callback, value) => async (dispatch) => {
   dispatch(requestCockTailsApi());
   if (value === 'filters') {
     const response = await callback();
     dispatch(requestCockTailsFilters(response.drinks));
   } else {
-    const response = await callback(value);
-    dispatch(requestCockTailsApiSuccess(response.drinks));
+    try {
+      const response = await callback(value);
+      dispatch(requestCockTailsApiSuccess(response.drinks));
+    } catch (errorMessage) {
+      dispatch(requestCockTailsApiError(errorMessage));
+    }
   }
 };

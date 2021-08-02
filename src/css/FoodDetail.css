@@ -4,8 +4,8 @@
 }
 
 .recommendedDrink > img {
-  width: 200px;
   height: 200px;
+  width: 200px;
 }
 
 .recommendedDrink {
@@ -23,7 +23,7 @@
 }
 
 .start-recipe-button {
-  position: fixed;
   bottom: 0;
   margin-left: 45%;
+  position: fixed;
 }

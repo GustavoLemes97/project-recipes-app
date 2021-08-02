@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import {
   getMealsDataByFilter,
@@ -10,8 +11,7 @@ import {
   getCockTailsDataByName,
   getCockTailsDataByFirstLetter,
 } from '../Services/cockTailAPI';
-import { fetchMealsAPI } from '../Actions/index';
-import { fetchCockTailsAPI } from '../Actions/index';
+import { fetchMealsAPI, fetchCockTailsAPI } from '../Actions/index';
 
 function SearchBar({ isFood }) {
   const [inputRadio, setInputRadio] = useState('');
@@ -20,44 +20,44 @@ function SearchBar({ isFood }) {
 
   const changeInputRadio = ({ target: { value } }) => {
     setInputRadio(value);
-  }
+  };
 
   const changeInput = ({ target: { value } }) => {
     setInput(value);
-  }
+  };
 
   const drinkFetchs = () => {
     switch (inputRadio) {
-      case 'ingredient':
-        dispatch(fetchCockTailsAPI(getCockTailsDataByFilter, input));
-        break;
-      case 'name':
-        dispatch(fetchCockTailsAPI(getCockTailsDataByName, input));
-        break;
-      case 'firstLetter': {
-        input.length > 1 ? window.alert('Sua busca deve conter somente 1 (um) caracter') :
-        dispatch(fetchCockTailsAPI(getCockTailsDataByFirstLetter, input));
-        break; 
-      }     
-      default:
-        break;
+    case 'ingredient':
+      dispatch(fetchCockTailsAPI(getCockTailsDataByFilter, input));
+      break;
+    case 'name':
+      dispatch(fetchCockTailsAPI(getCockTailsDataByName, input));
+      break;
+    case 'firstLetter': {
+      return input.length > 1
+        ? window.alert('Sua busca deve conter somente 1 (um) caracter')
+        : dispatch(fetchCockTailsAPI(getCockTailsDataByFirstLetter, input));
+    }
+    default:
+      break;
     }
   };
 
   const foodFetchs = () => {
     switch (inputRadio) {
-      case 'ingredient':
-        dispatch(fetchMealsAPI(getMealsDataByFilter, input));
-        break;
-      case 'name':
-        dispatch(fetchMealsAPI(getMealsDataByName, input));
-        break;
-      case 'firstLetter':
-        input.length > 1 ? window.alert('Sua busca deve conter somente 1 (um) caracter') :
-        dispatch(fetchMealsAPI(getMealsDataByFirstLetter, input));
-        break;    
-      default:
-        break;
+    case 'ingredient':
+      dispatch(fetchMealsAPI(getMealsDataByFilter, input));
+      break;
+    case 'name':
+      dispatch(fetchMealsAPI(getMealsDataByName, input));
+      break;
+    case 'firstLetter':
+      return input.length > 1
+        ? window.alert('Sua busca deve conter somente 1 (um) caracter')
+        : dispatch(fetchMealsAPI(getMealsDataByFirstLetter, input));
+    default:
+      break;
     }
   };
 
@@ -102,12 +102,16 @@ function SearchBar({ isFood }) {
       <button
         data-testid="exec-search-btn"
         type="button"
-        onClick={ () => isFood ? foodFetchs() : drinkFetchs() }
+        onClick={ () => (isFood ? foodFetchs() : drinkFetchs()) }
       >
-          Buscar
+        Buscar
       </button>
     </section>
   );
 }
 
 export default SearchBar;
+
+SearchBar.propTypes = {
+  isFood: PropTypes.bool.isRequired,
+};

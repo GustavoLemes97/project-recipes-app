@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from "react-router-dom";
+
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import Card from '../Components/Card';
@@ -53,7 +53,7 @@ function Drinks() {
 
   return (
     <div>
-      <Header pageTitle="Bebidas" searchBtn="true" isFood={ false }/>
+      <Header pageTitle="Bebidas" searchBtn="true" isFood={ false } />
 
       <button
         data-testid="All-category-filter"

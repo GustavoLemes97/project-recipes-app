@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from "react-router-dom";
-import { Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
+
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import Card from '../Components/Card';
@@ -54,7 +54,7 @@ function Food() {
 
   return (
     <div>
-      <Header pageTitle="Comidas" searchBtn="true" isFood="true"/>
+      <Header pageTitle="Comidas" searchBtn="true" isFood="true" />
 
       <button
         data-testid="All-category-filter"

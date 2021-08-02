@@ -2,3 +2,22 @@
   height: 250px;
   width: 250px;
 }
+
+.recommendedFood > img {
+  width: 200px;
+  height: 200px;
+}
+
+.recommendedFood {
+  border: 1px solid #252525;
+  width: 200px;
+}
+
+.recommendedFoods {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.recommendedFoodsNotVisible {
+  display: none;
+}

@@ -6,6 +6,7 @@ import { fetchCockTailsAPI } from '../Actions';
 import { getCockTailsDefault } from '../Services/cockTailAPI';
 
 function FoodDetail({ meal }) {
+  const [drink, setDrinks] = React.useState('');
   const {
     strMealThumb,
     strMeal,
@@ -21,7 +22,13 @@ function FoodDetail({ meal }) {
     dispatch(fetchCockTailsAPI(getCockTailsDefault));
   }, []);
 
-  console.log(globalState);
+  React.useEffect(() => {
+    const six = 6;
+    const filteredDrinks = globalState.drinks.filter((_, idx) => idx < six);
+    setDrinks(filteredDrinks);
+  }, [globalState.drinks]);
+
+  console.log(drink);
 
   const ingredients = Object.entries(meal).filter(
     (food) => food[0].includes('Ingredient') && food[1],
@@ -71,8 +78,24 @@ function FoodDetail({ meal }) {
         INICIAR
       </button>
 
-      <p data-testid="0-recomendation-card" />
-      <p data-testid="1-recomendation-card" />
+      <div className="recommendedDrinks">
+        {drink
+          && drink.map(
+            ({ strDrink, strDrinkThumb, strCategory: category }, index) => (
+              <div
+                data-testid={ `${index}-recomendation-card` }
+                className={
+                  index < 2 ? 'recommendedDrink' : 'recommendedDrinksNotVisible'
+                }
+                key={ index }
+              >
+                <img src={ strDrinkThumb } alt={ strDrinkThumb } />
+                <p>{category}</p>
+                <h4 data-testid={ `${index}-recomendation-title` }>{strDrink}</h4>
+              </div>
+            ),
+          )}
+      </div>
     </div>
   );
 }

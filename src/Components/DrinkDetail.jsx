@@ -1,24 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchMealsAPI } from '../Actions';
 import { getMealsDefault } from '../Services/mealAPI';
 import '../css/DrinkDetail.css';
 
 function DrinkDetail({ drink }) {
-  console.log(drink);
-  const {
-    strDrinkThumb,
-    strDrink,
-    strInstructions,
-    strAlcoholic,
-  } = drink;
+  const [food, setFoods] = React.useState('');
+  const { strDrinkThumb, strDrink, strInstructions, strAlcoholic } = drink;
 
   const dispatch = useDispatch();
-  const globalState = useSelector(({ drinks }) => drinks);
+  const globalState = useSelector(({ foods }) => foods);
 
   React.useEffect(() => {
     dispatch(fetchMealsAPI(getMealsDefault));
   }, []);
+
+  React.useEffect(() => {
+    const six = 6;
+    const filteredFoods = globalState.foods.filter((_, idx) => idx < six);
+    setFoods(filteredFoods);
+  }, [globalState.foods]);
 
   const ingredients = Object.entries(drink).filter(
     (cocktail) => cocktail[0].includes('Ingredient') && cocktail[1],
@@ -61,8 +63,22 @@ function DrinkDetail({ drink }) {
         INICIAR
       </button>
 
-      <p data-testid="0-recomendation-card" />
-      <p data-testid="1-recomendation-card" />
+      <div className="recommendedFoods">
+        {food
+          && food.map(({ strMeal, strMealThumb, strCategory }, index) => (
+            <div
+              data-testid={ `${index}-recomendation-card` }
+              className={
+                index < 2 ? 'recommendedFood' : 'recommendedFoodsNotVisible'
+              }
+              key={ index }
+            >
+              <img src={ strMealThumb } alt={ strMealThumb } />
+              <p>{strCategory}</p>
+              <h4 data-testid={ `${index}-recomendation-title` }>{strMeal}</h4>
+            </div>
+          ))}
+      </div>
     </div>
   );
 }

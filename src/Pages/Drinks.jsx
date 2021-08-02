@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from "react-router-dom";
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import Card from '../Components/Card';
@@ -18,6 +19,8 @@ function Drinks() {
 
   const dispatch = useDispatch();
   const globalState = useSelector(({ drinks }) => drinks);
+
+  const history = useHistory();
 
   React.useEffect(() => {
     dispatch(fetchCockTailsAPI(getCockTailsDefault));
@@ -46,6 +49,7 @@ function Drinks() {
   }
 
   if (!data) return <p>Loading...</p>;
+  if (data.length === 1) history.push(`/bebidas/${data[0].idDrink}`);
 
   return (
     <div>

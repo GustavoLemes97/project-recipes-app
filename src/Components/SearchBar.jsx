@@ -10,7 +10,6 @@ import {
   getCockTailsDataByName,
   getCockTailsDataByFirstLetter,
 } from '../Services/cockTailAPI';
-
 import { fetchMealsAPI } from '../Actions/index';
 import { fetchCockTailsAPI } from '../Actions/index';
 
@@ -103,9 +102,7 @@ function SearchBar({ isFood }) {
       <button
         data-testid="exec-search-btn"
         type="button"
-        onClick={ () => {
-          isFood ? foodFetchs() : drinkFetchs();
-        }}
+        onClick={ () => isFood ? foodFetchs() : drinkFetchs() }
       >
           Buscar
       </button>

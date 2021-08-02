@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import Card from '../Components/Card';
-import { fetchMealsAPI } from '../Actions';
+import { fetchMealsAPI, fetchMealFilters } from '../Actions';
 import {
   getMealsDefault,
   getMealsFilters,
@@ -20,10 +20,10 @@ function Food() {
   const dispatch = useDispatch();
   const globalState = useSelector(({ foods }) => foods);
 
-  window.onload = function onLoad() {
+  React.useEffect(() => {
     dispatch(fetchMealsAPI(getMealsDefault));
-    dispatch(fetchMealsAPI(getMealsFilters, 'filters'));
-  };
+    dispatch(fetchMealFilters(getMealsFilters));
+  }, []);
 
   React.useEffect(() => {
     const twelve = 12;

@@ -3,17 +3,24 @@ import {
   REQUEST_MEALS_API_SUCCESS,
   REQUEST_MEALS_API_ERROR,
   REQUEST_MEALS_FILTERS,
+  REQUEST_MEAL_DETAILS,
 } from '../Actions';
 
 const INITIAL_STATE = {
   foods: [],
   filters: [],
+  mealDetails: null,
   isLoading: false,
   error: '',
 };
 
 function foods(state = INITIAL_STATE, { type, payload }) {
   switch (type) {
+  case REQUEST_MEAL_DETAILS:
+    return {
+      ...state,
+      mealDetails: payload,
+    };
   case REQUEST_MEALS_FILTERS:
     return {
       ...state,

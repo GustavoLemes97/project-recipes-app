@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import Card from '../Components/Card';
-import { fetchCockTailsAPI } from '../Actions';
+import { fetchCockTailsAPI, fetchDrinkFilters } from '../Actions';
 import {
   getCockTailsDefault,
   getCockTailsFilters,
@@ -19,10 +19,10 @@ function Drinks() {
   const dispatch = useDispatch();
   const globalState = useSelector(({ drinks }) => drinks);
 
-  window.onload = function onLoad() {
+  React.useEffect(() => {
     dispatch(fetchCockTailsAPI(getCockTailsDefault));
-    dispatch(fetchCockTailsAPI(getCockTailsFilters, 'filters'));
-  };
+    dispatch(fetchDrinkFilters(getCockTailsFilters));
+  }, []);
 
   React.useEffect(() => {
     const five = 5;

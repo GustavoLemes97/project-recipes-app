@@ -3,9 +3,16 @@ const MEALS_NAME_API = 'https://www.themealdb.com/api/json/v1/1/filter.php?c=';
 const MEALS_FIRST_LETTER_API = 'https://www.themealdb.com/api/json/v1/1/search.php?f=';
 const DEFAULT_MEALS = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
 const MEALS_FILTERS = 'https://www.themealdb.com/api/json/v1/1/list.php?c=list';
+const MEAL_DETAILS = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
 
 export const getMealsDataByFilter = async (ingredient) => {
   const response = await fetch(`${MEALS_FILTER_API}${ingredient}`);
+  const json = await response.json();
+  return json;
+};
+
+export const getMealDetails = async (mealId) => {
+  const response = await fetch(`${MEAL_DETAILS}${mealId}`);
   const json = await response.json();
   return json;
 };
@@ -39,6 +46,7 @@ const requests = {
   getMealsDataByName,
   getMealsDataByFirstLetter,
   getMealsDefault,
+  getMealDetails,
 };
 
 export default requests;

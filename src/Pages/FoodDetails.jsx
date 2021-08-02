@@ -1,26 +1,28 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import FoodDetail from '../Components/FoodDetail';
+import { fetchMealDetails } from '../Actions';
+import { getMealDetails } from '../Services/mealAPI';
 
 function FoodDetails() {
   const [meal, setMeal] = React.useState('');
 
-  async function fetchFoodById() {
-    const { pathname } = window.location;
-    const id = pathname.match(/\d+/);
-    const response = await fetch(
-      `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`,
-    );
-    const json = await response.json();
-    setMeal(json.meals[0]);
-  }
+  const globalState = useSelector(({ foods }) => foods);
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
-    fetchFoodById();
+    const { pathname } = window.location;
+    const id = pathname.match(/\d+/);
+    dispatch(fetchMealDetails(getMealDetails, id));
   }, []);
+
+  React.useEffect(() => {
+    setMeal(globalState.mealDetails);
+  }, [globalState.mealDetails]);
 
   if (!meal) return <p>Loading...</p>;
 
-  return <FoodDetail meal={ meal } />;
+  return <FoodDetail meal={ meal[0] } />;
 }
 
 export default FoodDetails;

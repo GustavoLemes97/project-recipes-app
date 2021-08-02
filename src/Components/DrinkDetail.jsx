@@ -1,21 +1,21 @@
 import React from 'react';
-import '../css/FoodDetail.css';
 import PropTypes from 'prop-types';
+import '../css/DrinkDetail.css';
 
-function FoodDetail({ meal }) {
+function DrinkDetail({ drink }) {
+  console.log(drink);
   const {
-    strMealThumb,
-    strMeal,
-    strCategory,
+    strDrinkThumb,
+    strDrink,
     strInstructions,
-    strYoutube,
-  } = meal;
+    strAlcoholic,
+  } = drink;
 
-  const ingredients = Object.entries(meal).filter(
-    (food) => food[0].includes('Ingredient') && food[1],
+  const ingredients = Object.entries(drink).filter(
+    (cocktail) => cocktail[0].includes('Ingredient') && cocktail[1],
   );
 
-  const measures = Object.entries(meal).filter(
+  const measures = Object.entries(drink).filter(
     (measure) => measure[0].includes('Measure') && measure[1],
   );
 
@@ -23,11 +23,12 @@ function FoodDetail({ meal }) {
     <div>
       <img
         data-testid="recipe-photo"
-        className="foodDetail-img"
-        src={ strMealThumb }
-        alt={ strMealThumb }
+        className="drinkDetail-img"
+        src={ strDrinkThumb }
+        alt={ strDrinkThumb }
       />
-      <h1 data-testid="recipe-title">{strMeal}</h1>
+
+      <h1 data-testid="recipe-title">{strDrink}</h1>
 
       <button type="button" data-testid="share-btn">
         COMPARTILHAR
@@ -36,7 +37,7 @@ function FoodDetail({ meal }) {
         FAVORITAR
       </button>
 
-      <p data-testid="recipe-category">{strCategory}</p>
+      <p data-testid="recipe-category">{strAlcoholic}</p>
 
       <h2>Ingredientes:</h2>
       {ingredients.map((ingredient, index) => (
@@ -46,14 +47,6 @@ function FoodDetail({ meal }) {
       ))}
 
       <p data-testid="instructions">{strInstructions}</p>
-
-      <iframe
-        width="325"
-        height="240"
-        data-testid="video"
-        src={ strYoutube.replace('watch?v=', 'embed/') }
-        title="YouTube Video Player"
-      />
 
       <button type="button" data-testid="start-recipe-btn">
         INICIAR
@@ -65,14 +58,13 @@ function FoodDetail({ meal }) {
   );
 }
 
-FoodDetail.propTypes = {
-  meal: PropTypes.shape({
-    strMeal: PropTypes.string,
-    strMealThumb: PropTypes.string,
-    strCategory: PropTypes.string,
+export default DrinkDetail;
+
+DrinkDetail.propTypes = {
+  drink: PropTypes.shape({
+    strDrinkThumb: PropTypes.string,
+    strDrink: PropTypes.string,
     strInstructions: PropTypes.string,
-    strYoutube: PropTypes.string,
+    strAlcoholic: PropTypes.string,
   }).isRequired,
 };
-
-export default FoodDetail;

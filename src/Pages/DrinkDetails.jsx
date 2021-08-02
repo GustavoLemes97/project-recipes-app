@@ -24,7 +24,7 @@ function DrinkDetails() {
 
   if (!drink) return <p>Loading...</p>;
 
-  return <DrinkDetail drink={ drink[0] } id={ drinkId } />;
+  return <DrinkDetail drink={ drink[0] } id={ drinkId[0] } />;
 }
 
 export default DrinkDetails;

@@ -11,7 +11,13 @@ function DrinkDetail({ drink, id }) {
   const [food, setFoods] = React.useState('');
   const [copiedLink, setCopiedLink] = React.useState(false);
 
-  const { strDrinkThumb, strDrink, strInstructions, strAlcoholic } = drink;
+  const {
+    strDrinkThumb,
+    strDrink,
+    strInstructions,
+    strAlcoholic,
+    strCategory,
+  } = drink;
 
   const dispatch = useDispatch();
   const globalState = useSelector(({ foods }) => foods);
@@ -29,6 +35,28 @@ function DrinkDetail({ drink, id }) {
   function copyToClipBoard() {
     navigator.clipboard.writeText(window.location);
     setCopiedLink(true);
+  }
+
+  function favoriteRecipe() {
+    const store = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    const newFavoriteRecipe = {
+      id,
+      type: 'bebida',
+      area: '',
+      category: strCategory,
+      alcoholicOrNot: strAlcoholic,
+      name: strDrink,
+      image: strDrinkThumb,
+    };
+    if (store) {
+      const addFavoriteRecipe = [...store, newFavoriteRecipe];
+      localStorage.setItem('favoriteRecipes', JSON.stringify(addFavoriteRecipe));
+    } else {
+      localStorage.setItem(
+        'favoriteRecipes',
+        JSON.stringify([newFavoriteRecipe]),
+      );
+    }
   }
 
   const ingredients = Object.entries(drink).filter(
@@ -56,7 +84,7 @@ function DrinkDetail({ drink, id }) {
 
       {copiedLink && <p>Link copiado!</p>}
 
-      <button type="button" data-testid="favorite-btn">
+      <button onClick={ favoriteRecipe } type="button" data-testid="favorite-btn">
         FAVORITAR
       </button>
 
@@ -65,7 +93,14 @@ function DrinkDetail({ drink, id }) {
       <h2>Ingredientes:</h2>
       {ingredients.map((ingredient, index) => (
         <p data-testid={ `${index}-ingredient-name-and-measure` } key={ index }>
-          {` - ${ingredient[1]}: ${measures[index][1]}`}
+          {` - ${ingredient[1]}`}
+        </p>
+      ))}
+
+      <h2>Quantidades</h2>
+      {measures.map((measure, index) => (
+        <p data-testid={ `${index}-ingredient-name-and-measure` } key={ index }>
+          {` - ${measure[1]}`}
         </p>
       ))}
 
@@ -73,7 +108,7 @@ function DrinkDetail({ drink, id }) {
 
       <div className="recommendedFoods">
         {food
-          && food.map(({ strMeal, strMealThumb, strCategory }, index) => (
+          && food.map(({ strMeal, strMealThumb, strCategory: categ }, index) => (
             <div
               data-testid={ `${index}-recomendation-card` }
               className={
@@ -82,7 +117,7 @@ function DrinkDetail({ drink, id }) {
               key={ index }
             >
               <img src={ strMealThumb } alt={ strMealThumb } />
-              <p>{strCategory}</p>
+              <p>{categ}</p>
               <h4 data-testid={ `${index}-recomendation-title` }>{strMeal}</h4>
             </div>
           ))}
@@ -109,5 +144,7 @@ DrinkDetail.propTypes = {
     strDrink: PropTypes.string,
     strInstructions: PropTypes.string,
     strAlcoholic: PropTypes.string,
+    strCategory: PropTypes.string,
   }).isRequired,
+  id: PropTypes.string.isRequired,
 };

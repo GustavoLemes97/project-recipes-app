@@ -24,7 +24,7 @@ function FoodDetails() {
 
   if (!meal) return <p>Loading...</p>;
 
-  return <FoodDetail meal={ meal[0] } id={ foodId } />;
+  return <FoodDetail meal={ meal[0] } id={ foodId[0] } />;
 }
 
 export default FoodDetails;

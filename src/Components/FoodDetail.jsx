@@ -16,6 +16,7 @@ function FoodDetail({ meal, id }) {
     strCategory,
     strInstructions,
     strYoutube,
+    strArea,
   } = meal;
 
   const dispatch = useDispatch();
@@ -36,12 +37,34 @@ function FoodDetail({ meal, id }) {
     setCopiedLink(true);
   }
 
+  function favoriteRecipe() {
+    const store = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    const newFavoriteRecipe = {
+      id,
+      type: 'comida',
+      area: strArea,
+      category: strCategory,
+      alcoholicOrNot: '',
+      name: strMeal,
+      image: strMealThumb,
+    };
+    if (store) {
+      const addFavoriteRecipe = [...store, newFavoriteRecipe];
+      localStorage.setItem('favoriteRecipes', JSON.stringify(addFavoriteRecipe));
+    } else {
+      localStorage.setItem(
+        'favoriteRecipes',
+        JSON.stringify([newFavoriteRecipe]),
+      );
+    }
+  }
+
   const ingredients = Object.entries(meal).filter(
-    (food) => food[0].includes('Ingredient') && food[1],
+    (food) => food[0].includes('Ingredient') && food[1].replace(/ /, ''),
   );
 
   const measures = Object.entries(meal).filter(
-    (measure) => measure[0].includes('Measure') && measure[1],
+    (measure) => measure[0].includes('Measure') && measure[1].replace(/ /, ''),
   );
 
   return (
@@ -54,16 +77,13 @@ function FoodDetail({ meal, id }) {
       />
       <h1 data-testid="recipe-title">{strMeal}</h1>
 
-      <button
-        onClick={ copyToClipBoard }
-        type="button"
-      >
+      <button onClick={ copyToClipBoard } type="button">
         <img data-testid="share-btn" src={ shareIcon } alt={ shareIcon } />
       </button>
 
       {copiedLink && <p>Link copiado!</p>}
 
-      <button type="button" data-testid="favorite-btn">
+      <button onClick={ favoriteRecipe } type="button" data-testid="favorite-btn">
         FAVORITAR
       </button>
 
@@ -72,7 +92,14 @@ function FoodDetail({ meal, id }) {
       <h2>Ingredientes:</h2>
       {ingredients.map((ingredient, index) => (
         <p data-testid={ `${index}-ingredient-name-and-measure` } key={ index }>
-          {` - ${ingredient[1]}: ${measures[index][1]}`}
+          {` - ${ingredient[1]}`}
+        </p>
+      ))}
+
+      <h2>Quantidades</h2>
+      {measures.map((measure, index) => (
+        <p data-testid={ `${index}-ingredient-name-and-measure` } key={ index }>
+          {` - ${measure[1]}`}
         </p>
       ))}
 
@@ -125,7 +152,9 @@ FoodDetail.propTypes = {
     strCategory: PropTypes.string,
     strInstructions: PropTypes.string,
     strYoutube: PropTypes.string,
+    strArea: PropTypes.string,
   }).isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 export default FoodDetail;

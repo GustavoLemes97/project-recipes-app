@@ -50,7 +50,7 @@ function Food() {
 
   return (
     <div>
-      <Header pageTitle="Comidas" searchBtn="true" />
+      <Header pageTitle="Comidas" searchBtn="true" isFood="true"/>
 
       <button
         data-testid="All-category-filter"

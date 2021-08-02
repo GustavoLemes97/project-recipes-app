@@ -49,7 +49,7 @@ function Drinks() {
 
   return (
     <div>
-      <Header pageTitle="Bebidas" searchBtn="true" />
+      <Header pageTitle="Bebidas" searchBtn="true" isFood={ false }/>
 
       <button
         data-testid="All-category-filter"

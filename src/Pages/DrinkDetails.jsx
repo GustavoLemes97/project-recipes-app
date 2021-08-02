@@ -6,6 +6,7 @@ import DrinkDetail from '../Components/DrinkDetail';
 
 function DrinkDetails() {
   const [drink, setDrink] = React.useState('');
+  const [drinkId, setDrinkId] = React.useState('');
 
   const globalState = useSelector(({ drinks }) => drinks);
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ function DrinkDetails() {
   React.useEffect(() => {
     const { pathname } = window.location;
     const id = pathname.match(/\d+/);
+    setDrinkId(id);
     dispatch(fetchDrinkDetails(getCockTailDetails, id));
   }, []);
 
@@ -22,7 +24,7 @@ function DrinkDetails() {
 
   if (!drink) return <p>Loading...</p>;
 
-  return <DrinkDetail drink={ drink[0] } />;
+  return <DrinkDetail drink={ drink[0] } id={ drinkId } />;
 }
 
 export default DrinkDetails;

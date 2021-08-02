@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { fetchMealsAPI } from '../Actions';
 import { getMealsDefault } from '../Services/mealAPI';
 import '../css/DrinkDetail.css';
 
-function DrinkDetail({ drink }) {
+function DrinkDetail({ drink, id }) {
   const [food, setFoods] = React.useState('');
   const { strDrinkThumb, strDrink, strInstructions, strAlcoholic } = drink;
 
@@ -76,13 +77,15 @@ function DrinkDetail({ drink }) {
           ))}
       </div>
 
-      <button
-        data-testid="start-recipe-btn"
-        className="start-recipe-button"
-        type="button"
-      >
-        Iniciar Receita
-      </button>
+      <Link to={ `/bebidas/${id}/in-progress` }>
+        <button
+          data-testid="start-recipe-btn"
+          className="start-recipe-button"
+          type="button"
+        >
+          Iniciar Receita
+        </button>
+      </Link>
     </div>
   );
 }

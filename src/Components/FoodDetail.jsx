@@ -2,10 +2,11 @@ import React from 'react';
 import '../css/FoodDetail.css';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { fetchCockTailsAPI } from '../Actions';
 import { getCockTailsDefault } from '../Services/cockTailAPI';
 
-function FoodDetail({ meal }) {
+function FoodDetail({ meal, id }) {
   const [drink, setDrinks] = React.useState('');
   const {
     strMealThumb,
@@ -27,8 +28,6 @@ function FoodDetail({ meal }) {
     const filteredDrinks = globalState.drinks.filter((_, idx) => idx < six);
     setDrinks(filteredDrinks);
   }, [globalState.drinks]);
-
-  console.log(drink);
 
   const ingredients = Object.entries(meal).filter(
     (food) => food[0].includes('Ingredient') && food[1],
@@ -93,13 +92,15 @@ function FoodDetail({ meal }) {
           )}
       </div>
 
-      <button
-        data-testid="start-recipe-btn"
-        className="start-recipe-button"
-        type="button"
-      >
-        Iniciar Receita
-      </button>
+      <Link to={ `/comidas/${id}/in-progress` }>
+        <button
+          data-testid="start-recipe-btn"
+          className="start-recipe-button"
+          type="button"
+        >
+          Iniciar Receita
+        </button>
+      </Link>
     </div>
   );
 }

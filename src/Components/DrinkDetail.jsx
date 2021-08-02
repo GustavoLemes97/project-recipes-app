@@ -5,10 +5,13 @@ import { Link } from 'react-router-dom';
 import { fetchMealsAPI } from '../Actions';
 import { getMealsDefault } from '../Services/mealAPI';
 import shareIcon from '../images/shareIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import '../css/DrinkDetail.css';
 
 function DrinkDetail({ drink, id }) {
   const [food, setFoods] = React.useState('');
+  const [favorited, setFavorited] = React.useState(false);
   const [copiedLink, setCopiedLink] = React.useState(false);
 
   const {
@@ -24,6 +27,18 @@ function DrinkDetail({ drink, id }) {
 
   React.useEffect(() => {
     dispatch(fetchMealsAPI(getMealsDefault));
+  }, []);
+
+  React.useEffect(() => {
+    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
+
+    if (favoriteRecipes) {
+      const actualRecipe = favoriteRecipes.find(({ id: ID }) => ID === id);
+
+      if (actualRecipe) {
+        setFavorited(true);
+      }
+    }
   }, []);
 
   React.useEffect(() => {
@@ -48,6 +63,7 @@ function DrinkDetail({ drink, id }) {
       name: strDrink,
       image: strDrinkThumb,
     };
+
     if (store) {
       const addFavoriteRecipe = [...store, newFavoriteRecipe];
       localStorage.setItem('favoriteRecipes', JSON.stringify(addFavoriteRecipe));
@@ -57,6 +73,7 @@ function DrinkDetail({ drink, id }) {
         JSON.stringify([newFavoriteRecipe]),
       );
     }
+    setFavorited(!favorited);
   }
 
   const ingredients = Object.entries(drink).filter(
@@ -84,8 +101,12 @@ function DrinkDetail({ drink, id }) {
 
       {copiedLink && <p>Link copiado!</p>}
 
-      <button onClick={ favoriteRecipe } type="button" data-testid="favorite-btn">
-        FAVORITAR
+      <button onClick={ favoriteRecipe } type="button">
+        <img
+          data-testid="favorite-btn"
+          src={ favorited ? blackHeartIcon : whiteHeartIcon }
+          alt="favorite-btn"
+        />
       </button>
 
       <p data-testid="recipe-category">{strAlcoholic}</p>

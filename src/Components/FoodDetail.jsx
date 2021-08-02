@@ -6,10 +6,14 @@ import { Link } from 'react-router-dom';
 import { fetchCockTailsAPI } from '../Actions';
 import { getCockTailsDefault } from '../Services/cockTailAPI';
 import shareIcon from '../images/shareIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
 function FoodDetail({ meal, id }) {
   const [drink, setDrinks] = React.useState('');
   const [copiedLink, setCopiedLink] = React.useState(false);
+  const [favorited, setFavorited] = React.useState(false);
+
   const {
     strMealThumb,
     strMeal,
@@ -24,6 +28,18 @@ function FoodDetail({ meal, id }) {
 
   React.useEffect(() => {
     dispatch(fetchCockTailsAPI(getCockTailsDefault));
+  }, []);
+
+  React.useEffect(() => {
+    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
+
+    if (favoriteRecipes) {
+      const actualRecipe = favoriteRecipes.find(({ id: ID }) => ID === id);
+
+      if (actualRecipe) {
+        setFavorited(true);
+      }
+    }
   }, []);
 
   React.useEffect(() => {
@@ -57,14 +73,15 @@ function FoodDetail({ meal, id }) {
         JSON.stringify([newFavoriteRecipe]),
       );
     }
+    setFavorited(!favorited);
   }
 
   const ingredients = Object.entries(meal).filter(
-    (food) => food[0].includes('Ingredient') && food[1].replace(/ /, ''),
+    (food) => food[0].includes('Ingredient') && food[1],
   );
 
   const measures = Object.entries(meal).filter(
-    (measure) => measure[0].includes('Measure') && measure[1].replace(/ /, ''),
+    (measure) => measure[0].includes('Measure') && measure[1],
   );
 
   return (
@@ -83,8 +100,12 @@ function FoodDetail({ meal, id }) {
 
       {copiedLink && <p>Link copiado!</p>}
 
-      <button onClick={ favoriteRecipe } type="button" data-testid="favorite-btn">
-        FAVORITAR
+      <button onClick={ favoriteRecipe } type="button">
+        <img
+          data-testid="favorite-btn"
+          src={ favorited ? blackHeartIcon : whiteHeartIcon }
+          alt="favorite-btn"
+        />
       </button>
 
       <p data-testid="recipe-category">{strCategory}</p>

@@ -59,10 +59,6 @@ function DrinkDetail({ drink }) {
 
       <p data-testid="instructions">{strInstructions}</p>
 
-      <button type="button" data-testid="start-recipe-btn">
-        INICIAR
-      </button>
-
       <div className="recommendedFoods">
         {food
           && food.map(({ strMeal, strMealThumb, strCategory }, index) => (
@@ -79,6 +75,14 @@ function DrinkDetail({ drink }) {
             </div>
           ))}
       </div>
+
+      <button
+        data-testid="start-recipe-btn"
+        className="start-recipe-button"
+        type="button"
+      >
+        Iniciar Receita
+      </button>
     </div>
   );
 }

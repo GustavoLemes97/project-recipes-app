@@ -74,10 +74,6 @@ function FoodDetail({ meal }) {
         title="YouTube Video Player"
       />
 
-      <button type="button" data-testid="start-recipe-btn">
-        INICIAR
-      </button>
-
       <div className="recommendedDrinks">
         {drink
           && drink.map(
@@ -96,6 +92,14 @@ function FoodDetail({ meal }) {
             ),
           )}
       </div>
+
+      <button
+        data-testid="start-recipe-btn"
+        className="start-recipe-button"
+        type="button"
+      >
+        Iniciar Receita
+      </button>
     </div>
   );
 }

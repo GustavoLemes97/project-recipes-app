@@ -21,3 +21,9 @@
 .recommendedFoodsNotVisible {
   display: none;
 }
+
+.start-recipe-button {
+  position: fixed;
+  bottom: 0;
+  margin-left: 45%;
+}

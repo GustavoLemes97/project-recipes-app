@@ -2,3 +2,28 @@
   height: 250px;
   width: 250px;
 }
+
+.recommendedDrink > img {
+  width: 200px;
+  height: 200px;
+}
+
+.recommendedDrink {
+  border: 1px solid #252525;
+  width: 200px;
+}
+
+.recommendedDrinks {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.recommendedDrinksNotVisible {
+  display: none;
+}
+
+.start-recipe-button {
+  position: fixed;
+  bottom: 0;
+  margin-left: 45%;
+}

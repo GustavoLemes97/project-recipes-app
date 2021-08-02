@@ -6,6 +6,7 @@ import { getMealDetails } from '../Services/mealAPI';
 
 function FoodDetails() {
   const [meal, setMeal] = React.useState('');
+  const [foodId, setFoodId] = React.useState('');
 
   const globalState = useSelector(({ foods }) => foods);
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ function FoodDetails() {
   React.useEffect(() => {
     const { pathname } = window.location;
     const id = pathname.match(/\d+/);
+    setFoodId(id);
     dispatch(fetchMealDetails(getMealDetails, id));
   }, []);
 
@@ -22,7 +24,7 @@ function FoodDetails() {
 
   if (!meal) return <p>Loading...</p>;
 
-  return <FoodDetail meal={ meal[0] } />;
+  return <FoodDetail meal={ meal[0] } id={ foodId[0] } />;
 }
 
 export default FoodDetails;

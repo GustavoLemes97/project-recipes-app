@@ -4,6 +4,7 @@ const MEALS_FIRST_LETTER_API = 'https://www.themealdb.com/api/json/v1/1/search.p
 const DEFAULT_MEALS = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
 const MEALS_FILTERS = 'https://www.themealdb.com/api/json/v1/1/list.php?c=list';
 const MEAL_DETAILS = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
+const RANDOM_MEAL = 'https://www.themealdb.com/api/json/v1/1/random.php';
 
 export const getMealsDataByFilter = async (ingredient) => {
   const response = await fetch(`${MEALS_FILTER_API}${ingredient}`);
@@ -41,12 +42,19 @@ export const getMealsDefault = async () => {
   return json;
 };
 
+export const getRandomMeal = async () => {
+  const response = await fetch(`${RANDOM_MEAL}`);
+  const json = await response.json();
+  return json.meals[0].idMeal;
+};
+
 const requests = {
   getMealsDataByFilter,
   getMealsDataByName,
   getMealsDataByFirstLetter,
   getMealsDefault,
   getMealDetails,
+  getRandomMeal,
 };
 
 export default requests;

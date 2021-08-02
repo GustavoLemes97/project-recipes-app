@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import Header from '../Components/Header';
@@ -9,7 +9,7 @@ import { fetchCockTailsAPI, fetchDrinkFilters } from '../Actions';
 import {
   getCockTailsDefault,
   getCockTailsFilters,
-  getCockTailsDataByName,
+  getCockTailsByCategory,
 } from '../Services/cockTailAPI';
 
 function Drinks() {
@@ -19,8 +19,6 @@ function Drinks() {
 
   const dispatch = useDispatch();
   const globalState = useSelector(({ drinks }) => drinks);
-
-  const history = useHistory();
 
   React.useEffect(() => {
     dispatch(fetchCockTailsAPI(getCockTailsDefault));
@@ -43,13 +41,12 @@ function Drinks() {
     if (strCategory === selected) {
       dispatch(fetchCockTailsAPI(getCockTailsDefault));
     } else {
-      dispatch(fetchCockTailsAPI(getCockTailsDataByName, strCategory));
+      dispatch(fetchCockTailsAPI(getCockTailsByCategory, strCategory));
       setSelected(strCategory);
     }
   }
 
   if (!data) return <p>Loading...</p>;
-  if (data.length === 1) history.push(`/bebidas/${data[0].idDrink}`);
 
   return (
     <div>

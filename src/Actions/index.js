@@ -58,7 +58,11 @@ export const fetchMealsAPI = (callback, value) => async (dispatch) => {
   dispatch(requestMealsApi());
   try {
     const response = await callback(value);
-    dispatch(requestMealApiSuccess(response.meals));
+    if (response.meals === null) {
+      window.alert(
+        'Sinto muito, não encontramos nenhuma receita para esses filtros.',
+      );
+    } else dispatch(requestMealApiSuccess(response.meals));
   } catch (errorMessage) {
     dispatch(requestMealApiError(errorMessage));
   }
@@ -113,7 +117,11 @@ export const fetchCockTailsAPI = (callback, value) => async (dispatch) => {
   dispatch(requestCockTailsApi());
   try {
     const response = await callback(value);
-    dispatch(requestCockTailsApiSuccess(response.drinks));
+    if (response.drinks === null) {
+      window.alert(
+        'Sinto muito, não encontramos nenhuma receita para esses filtros.',
+      );
+    } else dispatch(requestCockTailsApiSuccess(response.drinks));
   } catch (errorMessage) {
     dispatch(requestCockTailsApiError(errorMessage));
   }

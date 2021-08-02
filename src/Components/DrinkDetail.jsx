@@ -4,10 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchMealsAPI } from '../Actions';
 import { getMealsDefault } from '../Services/mealAPI';
+import shareIcon from '../images/shareIcon.svg';
 import '../css/DrinkDetail.css';
 
 function DrinkDetail({ drink, id }) {
   const [food, setFoods] = React.useState('');
+  const [copiedLink, setCopiedLink] = React.useState(false);
+
   const { strDrinkThumb, strDrink, strInstructions, strAlcoholic } = drink;
 
   const dispatch = useDispatch();
@@ -22,6 +25,11 @@ function DrinkDetail({ drink, id }) {
     const filteredFoods = globalState.foods.filter((_, idx) => idx < six);
     setFoods(filteredFoods);
   }, [globalState.foods]);
+
+  function copyToClipBoard() {
+    navigator.clipboard.writeText(window.location);
+    setCopiedLink(true);
+  }
 
   const ingredients = Object.entries(drink).filter(
     (cocktail) => cocktail[0].includes('Ingredient') && cocktail[1],
@@ -42,9 +50,12 @@ function DrinkDetail({ drink, id }) {
 
       <h1 data-testid="recipe-title">{strDrink}</h1>
 
-      <button type="button" data-testid="share-btn">
-        COMPARTILHAR
+      <button type="button" onClick={ copyToClipBoard }>
+        <img data-testid="share-btn" src={ shareIcon } alt={ shareIcon } />
       </button>
+
+      {copiedLink && <p>Link copiado!</p>}
+
       <button type="button" data-testid="favorite-btn">
         FAVORITAR
       </button>

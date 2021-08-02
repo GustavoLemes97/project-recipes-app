@@ -5,9 +5,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchCockTailsAPI } from '../Actions';
 import { getCockTailsDefault } from '../Services/cockTailAPI';
+import shareIcon from '../images/shareIcon.svg';
 
 function FoodDetail({ meal, id }) {
   const [drink, setDrinks] = React.useState('');
+  const [copiedLink, setCopiedLink] = React.useState(false);
   const {
     strMealThumb,
     strMeal,
@@ -29,6 +31,11 @@ function FoodDetail({ meal, id }) {
     setDrinks(filteredDrinks);
   }, [globalState.drinks]);
 
+  function copyToClipBoard() {
+    navigator.clipboard.writeText(window.location);
+    setCopiedLink(true);
+  }
+
   const ingredients = Object.entries(meal).filter(
     (food) => food[0].includes('Ingredient') && food[1],
   );
@@ -47,9 +54,15 @@ function FoodDetail({ meal, id }) {
       />
       <h1 data-testid="recipe-title">{strMeal}</h1>
 
-      <button type="button" data-testid="share-btn">
-        COMPARTILHAR
+      <button
+        onClick={ copyToClipBoard }
+        type="button"
+      >
+        <img data-testid="share-btn" src={ shareIcon } alt={ shareIcon } />
       </button>
+
+      {copiedLink && <p>Link copiado!</p>}
+
       <button type="button" data-testid="favorite-btn">
         FAVORITAR
       </button>

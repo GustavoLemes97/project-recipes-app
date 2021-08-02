@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { fetchMealsAPI } from '../Actions';
+import { getMealsDefault } from '../Services/mealAPI';
 import '../css/DrinkDetail.css';
 
 function DrinkDetail({ drink }) {
@@ -10,6 +12,13 @@ function DrinkDetail({ drink }) {
     strInstructions,
     strAlcoholic,
   } = drink;
+
+  const dispatch = useDispatch();
+  const globalState = useSelector(({ drinks }) => drinks);
+
+  React.useEffect(() => {
+    dispatch(fetchMealsAPI(getMealsDefault));
+  }, []);
 
   const ingredients = Object.entries(drink).filter(
     (cocktail) => cocktail[0].includes('Ingredient') && cocktail[1],

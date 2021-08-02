@@ -1,6 +1,9 @@
 import React from 'react';
 import '../css/FoodDetail.css';
 import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchCockTailsAPI } from '../Actions';
+import { getCockTailsDefault } from '../Services/cockTailAPI';
 
 function FoodDetail({ meal }) {
   const {
@@ -10,6 +13,15 @@ function FoodDetail({ meal }) {
     strInstructions,
     strYoutube,
   } = meal;
+
+  const dispatch = useDispatch();
+  const globalState = useSelector(({ drinks }) => drinks);
+
+  React.useEffect(() => {
+    dispatch(fetchCockTailsAPI(getCockTailsDefault));
+  }, []);
+
+  console.log(globalState);
 
   const ingredients = Object.entries(meal).filter(
     (food) => food[0].includes('Ingredient') && food[1],

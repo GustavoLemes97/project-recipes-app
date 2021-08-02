@@ -1,38 +1,52 @@
 const MEALS_FILTER_API = 'https://www.themealdb.com/api/json/v1/1/filter.php?i=';
-const MEALS_NAME_API = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+const MEALS_NAME_API = 'https://www.themealdb.com/api/json/v1/1/filter.php?c=';
 const MEALS_FIRST_LETTER_API = 'https://www.themealdb.com/api/json/v1/1/search.php?f=';
+const DEFAULT_MEALS = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+const MEALS_FILTERS = 'https://www.themealdb.com/api/json/v1/1/list.php?c=list';
+const MEAL_DETAILS = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
 
-export const getMealsDataByFilter = (ingredient) => (
-  fetch(`${MEALS_FILTER_API}${ingredient}`)
-    .then((response) => (
-      response
-        .json()
-        .then((json) => (response.ok ? Promise.resolve(json) : Promise.reject(json)))
-    ))
-);
+export const getMealsDataByFilter = async (ingredient) => {
+  const response = await fetch(`${MEALS_FILTER_API}${ingredient}`);
+  const json = await response.json();
+  return json;
+};
 
-export const getMealsDataByName = (name) => (
-  fetch(`${MEALS_NAME_API}${name}`)
-    .then((response) => (
-      response
-        .json()
-        .then((json) => (response.ok ? Promise.resolve(json) : Promise.reject(json)))
-    ))
-);
+export const getMealDetails = async (mealId) => {
+  const response = await fetch(`${MEAL_DETAILS}${mealId}`);
+  const json = await response.json();
+  return json;
+};
 
-export const getMealsDataByFirstLetter = (firstLetter) => (
-  fetch(`${MEALS_FIRST_LETTER_API}${firstLetter}`)
-    .then((response) => (
-      response
-        .json()
-        .then((json) => (response.ok ? Promise.resolve(json) : Promise.reject(json)))
-    ))
-);
+export const getMealsDataByName = async (name) => {
+  const response = await fetch(`${MEALS_NAME_API}${name}`);
+  const json = await response.json();
+  return json;
+};
+
+export const getMealsDataByFirstLetter = async (firstLetter) => {
+  const response = await fetch(`${MEALS_FIRST_LETTER_API}${firstLetter}`);
+  const json = await response.json();
+  return json;
+};
+
+export const getMealsFilters = async () => {
+  const response = await fetch(MEALS_FILTERS);
+  const json = await response.json();
+  return json;
+};
+
+export const getMealsDefault = async () => {
+  const response = await fetch(DEFAULT_MEALS);
+  const json = await response.json();
+  return json;
+};
 
 const requests = {
   getMealsDataByFilter,
   getMealsDataByName,
   getMealsDataByFirstLetter,
+  getMealsDefault,
+  getMealDetails,
 };
 
 export default requests;

@@ -1,5 +1,5 @@
 const MEALS_FILTER_API = 'https://www.themealdb.com/api/json/v1/1/filter.php?i=';
-const MEALS_NAME_API = 'https://www.themealdb.com/api/json/v1/1/filter.php?c=';
+const MEALS_NAME_API = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
 const MEALS_FIRST_LETTER_API = 'https://www.themealdb.com/api/json/v1/1/search.php?f=';
 const DEFAULT_MEALS = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
 const MEALS_FILTERS = 'https://www.themealdb.com/api/json/v1/1/list.php?c=list';

@@ -5,7 +5,7 @@ import ProfileIcon from '../images/profileIcon.svg';
 import SearchIcon from '../images/searchIcon.svg';
 import SearchBar from './SearchBar';
 
-function Header({ pageTitle, searchBtn }) {
+function Header({ pageTitle, searchBtn, isFood }) {
   const [showBar, setShowBar] = useState(false);
   return (
     <>
@@ -27,7 +27,7 @@ function Header({ pageTitle, searchBtn }) {
           </button>
         )}
       </nav>
-      {showBar && <SearchBar />}
+      {showBar && <SearchBar isFood={ isFood } />}
     </>
   );
 }

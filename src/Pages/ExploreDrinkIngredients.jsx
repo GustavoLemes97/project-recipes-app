@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import IngredientCard from '../Components/IngredientCard';
+
 import { getCockTailsIngredients } from '../Services/cockTailAPI';
 
 function ExploreDrinkIngredients() {
@@ -15,7 +17,7 @@ function ExploreDrinkIngredients() {
 
       data = data.filter((_, index) => index < TWELVE);
       setIngredients(data);
-    }
+    };
     fetch();
   }, []);
 
@@ -24,15 +26,21 @@ function ExploreDrinkIngredients() {
   return (
     <div>
       <Header pageTitle="Explorar Ingredientes" />
-      {ingredients.map(({strIngredient1}, index) => (
-        <Link to="/bebidas">
+      {ingredients.map(({ strIngredient1 }, index) => (
+        <Link
+          key={ index }
+          to={ {
+            pathname: '/bebidas',
+            state: strIngredient1,
+          } }
+        >
           <IngredientCard
             name={ strIngredient1 }
             index={ index }
-            thumb= {`https://www.thecocktaildb.com/images/ingredients/${strIngredient1}-Small.png`}
+            thumb={ `https://www.thecocktaildb.com/images/ingredients/${strIngredient1}-Small.png` }
           />
         </Link>
-        
+
       ))}
       <Footer />
     </div>);

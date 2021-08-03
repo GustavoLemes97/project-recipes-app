@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import Header from '../Components/Header';
@@ -10,6 +10,7 @@ import {
   getCockTailsDefault,
   getCockTailsFilters,
   getCockTailsByCategory,
+  getCockTailsDataByFilter,
 } from '../Services/cockTailAPI';
 
 function Drinks() {
@@ -17,11 +18,17 @@ function Drinks() {
   const [filters, setFilters] = React.useState();
   const [selected, setSelected] = React.useState();
 
+  const location = useLocation();
   const dispatch = useDispatch();
   const globalState = useSelector(({ drinks }) => drinks);
 
   React.useEffect(() => {
-    dispatch(fetchCockTailsAPI(getCockTailsDefault));
+    if (location.state) {
+      dispatch(fetchCockTailsAPI(getCockTailsDataByFilter, location.state));
+    } else {
+      dispatch(fetchCockTailsAPI(getCockTailsDefault));
+    }
+
     dispatch(fetchDrinkFilters(getCockTailsFilters));
   }, []);
 

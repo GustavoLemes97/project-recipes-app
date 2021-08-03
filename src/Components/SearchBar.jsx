@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
   getMealsDataByFilter,
   getMealsDataByName,
@@ -17,6 +18,19 @@ function SearchBar({ isFood }) {
   const [inputRadio, setInputRadio] = useState('');
   const [input, setInput] = useState('');
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  const globalDrinks = useSelector(({ drinks }) => drinks);
+  const globalFoods = useSelector(({ foods }) => foods);
+
+  React.useEffect(() => {
+    if (globalDrinks.drinks.length === 1) {
+      history.push(`/bebidas/${globalDrinks.drinks[0].idDrink}`);
+    }
+    if (globalFoods.foods.length === 1) {
+      history.push(`/comidas/${globalFoods.foods[0].idMeal}`);
+    }
+  }, [globalDrinks.drinks.length, globalFoods.foods.length]);
 
   const changeInputRadio = ({ target: { value } }) => {
     setInputRadio(value);

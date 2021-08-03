@@ -3,6 +3,28 @@ import '../css/FoodProcess.css';
 
 function FoodProcess() {
   const [data, setData] = React.useState('');
+  const [ingredient, setIngredients] = React.useState([]);
+
+  function setStateInLocalStorage() {
+    const store = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    const { pathname } = window.location;
+    const id = pathname.match(/\d+/)[0];
+
+    if (store) {
+      store.meals[id] = ingredient.map((arr) => arr[1]);
+      localStorage.setItem('inProgressRecipes', JSON.stringify(store));
+    } else {
+      localStorage.setItem(
+        'inProgressRecipes',
+        JSON.stringify({
+          cocktails: {},
+          meals: {
+            [id]: ingredient.map((arr) => arr[1]),
+          },
+        }),
+      );
+    }
+  }
 
   async function fetchMeal(id) {
     const response = await fetch(
@@ -10,6 +32,11 @@ function FoodProcess() {
     );
     const json = await response.json();
     setData(json.meals[0]);
+    setIngredients(
+      Object.entries(json.meals[0]).filter(
+        (arr) => arr[0].includes('Ingredient') && arr[1],
+      ),
+    );
   }
 
   function checkedIngredient({ target: { checked, parentNode } }) {
@@ -18,6 +45,7 @@ function FoodProcess() {
     } else {
       parentNode.style.textDecoration = 'none';
     }
+    setStateInLocalStorage();
   }
 
   React.useEffect(() => {
@@ -29,10 +57,6 @@ function FoodProcess() {
   if (!data) return <p>Loading...</p>;
 
   const { strMealThumb, strMeal, strCategory, strInstructions } = data;
-
-  const ingredients = Object.entries(data).filter(
-    (arr) => arr[0].includes('Ingredient') && arr[1],
-  );
 
   return (
     <div>
@@ -53,18 +77,14 @@ function FoodProcess() {
 
       <p data-testid="recipe-category">{`Category: ${strCategory}`}</p>
 
-      {ingredients.map((ingredient, index) => (
+      {ingredient.map((ingred, index) => (
         <label
           key={ index }
           data-testid={ `${index}-ingredient-step` }
-          htmlFor={ ingredient[1] }
+          htmlFor={ ingred[1] }
         >
-          {ingredient[1]}
-          <input
-            onClick={ checkedIngredient }
-            type="checkbox"
-            id={ ingredient[1] }
-          />
+          {ingred[1]}
+          <input onClick={ checkedIngredient } type="checkbox" id={ ingred[1] } />
         </label>
       ))}
 

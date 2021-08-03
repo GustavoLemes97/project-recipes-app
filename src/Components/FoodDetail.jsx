@@ -49,9 +49,18 @@ function FoodDetail({ meal, id }) {
 
   React.useEffect(() => {
     dispatch(fetchCockTailsAPI(getCockTailsDefault));
-    localStorageHandle(setFavorited, id, 'favoriteRecipes');
+  }, []);
+
+  React.useEffect(() => {
     localStorageHandle(setDoneRecipe, id, 'doneRecipes');
+  }, []);
+
+  React.useEffect(() => {
     handleInProgressRecipe(setProgressRecipe, id);
+  }, []);
+
+  React.useEffect(() => {
+    localStorageHandle(setFavorited, id, 'favoriteRecipes');
   }, []);
 
   React.useEffect(() => {

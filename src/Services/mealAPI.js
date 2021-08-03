@@ -6,6 +6,7 @@ const MEALS_FILTERS = 'https://www.themealdb.com/api/json/v1/1/list.php?c=list';
 const MEAL_DETAILS = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
 const RANDOM_MEAL = 'https://www.themealdb.com/api/json/v1/1/random.php';
 const MEAL_BY_CATEGORY = 'https://www.themealdb.com/api/json/v1/1/filter.php?c=';
+const MEAL_INGREDIENTS = 'https://www.themealdb.com/api/json/v1/1/list.php?i=list';
 
 export const getMealsDataByFilter = async (ingredient) => {
   const response = await fetch(`${MEALS_FILTER_API}${ingredient}`);
@@ -53,6 +54,12 @@ export const getRandomMeal = async () => {
   const response = await fetch(`${RANDOM_MEAL}`);
   const json = await response.json();
   return json.meals[0].idMeal;
+};
+
+export const getMealsIngredients = async () => {
+  const response = await fetch(`${MEAL_INGREDIENTS}`);
+  const json = await response.json();
+  return json.meals;
 };
 
 const requests = {

@@ -44,13 +44,16 @@ function DrinkProcess() {
 
       <p data-testid="recipe-category">{`Category: ${strCategory}`}</p>
 
-      <ul>
-        {ingredients.map((ingredient, index) => (
-          <li key={ index } data-testid={ `${index}-ingredient-step` }>
-            {ingredient[1]}
-          </li>
-        ))}
-      </ul>
+      {ingredients.map((ingredient, index) => (
+        <label
+          key={ index }
+          data-testid={ `${index}-ingredient-step` }
+          htmlFor={ ingredient[1] }
+        >
+          {ingredient[1]}
+          <input type="checkbox" id={ ingredient[1] } />
+        </label>
+      ))}
 
       <p data-testid="instructions">{strInstructions}</p>
 

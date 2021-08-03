@@ -12,6 +12,14 @@ function FoodProcess() {
     setData(json.meals[0]);
   }
 
+  function checkedIngredient({ target: { checked, parentNode } }) {
+    if (checked) {
+      parentNode.style.textDecoration = 'line-through';
+    } else {
+      parentNode.style.textDecoration = 'none';
+    }
+  }
+
   React.useEffect(() => {
     const { pathname } = window.location;
     const id = pathname.match(/\d+/)[0];
@@ -52,7 +60,11 @@ function FoodProcess() {
           htmlFor={ ingredient[1] }
         >
           {ingredient[1]}
-          <input type="checkbox" id={ ingredient[1] } />
+          <input
+            onClick={ checkedIngredient }
+            type="checkbox"
+            id={ ingredient[1] }
+          />
         </label>
       ))}
 

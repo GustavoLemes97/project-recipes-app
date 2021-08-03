@@ -17,6 +17,14 @@ function DrinkProcess() {
     fetchMeal(id);
   }, []);
 
+  function checkedIngredient({ target: { checked, parentNode } }) {
+    if (checked) {
+      parentNode.style.textDecoration = 'line-through';
+    } else {
+      parentNode.style.textDecoration = 'none';
+    }
+  }
+
   if (!data) return <p>Loading...</p>;
 
   const { strDrinkThumb, strDrink, strCategory, strInstructions } = data;
@@ -51,7 +59,11 @@ function DrinkProcess() {
           htmlFor={ ingredient[1] }
         >
           {ingredient[1]}
-          <input type="checkbox" id={ ingredient[1] } />
+          <input
+            onClick={ checkedIngredient }
+            type="checkbox"
+            id={ ingredient[1] }
+          />
         </label>
       ))}
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from "react-router-dom";
 import { Link } from 'react-router-dom';
+
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import Card from '../Components/Card';
@@ -9,7 +9,7 @@ import { fetchMealsAPI, fetchMealFilters } from '../Actions';
 import {
   getMealsDefault,
   getMealsFilters,
-  getMealsDataByName,
+  getMealsByCategory,
 } from '../Services/mealAPI';
 import '../css/Food.css';
 
@@ -17,11 +17,8 @@ function Food() {
   const [data, setData] = React.useState();
   const [filters, setFilters] = React.useState();
   const [selected, setSelected] = React.useState();
-
   const dispatch = useDispatch();
   const globalState = useSelector(({ foods }) => foods);
-
-  const history = useHistory();
 
   React.useEffect(() => {
     dispatch(fetchMealsAPI(getMealsDefault));
@@ -44,17 +41,16 @@ function Food() {
     if (strCategory === selected) {
       dispatch(fetchMealsAPI(getMealsDefault));
     } else {
-      dispatch(fetchMealsAPI(getMealsDataByName, strCategory));
+      dispatch(fetchMealsAPI(getMealsByCategory, strCategory));
       setSelected(strCategory);
     }
   }
 
   if (!data) return <p>Loading...</p>;
-  if (data.length === 1) history.push(`/comidas/${data[0].idMeal}`);
 
   return (
     <div>
-      <Header pageTitle="Comidas" searchBtn="true" isFood="true"/>
+      <Header pageTitle="Comidas" searchBtn="true" isFood="true" />
 
       <button
         data-testid="All-category-filter"

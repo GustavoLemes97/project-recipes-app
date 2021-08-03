@@ -35,6 +35,7 @@ function Header({ pageTitle, searchBtn, isFood }) {
 Header.propTypes = {
   pageTitle: PropTypes.string.isRequired,
   searchBtn: PropTypes.string.isRequired,
+  isFood: PropTypes.bool.isRequired,
 };
 
 export default Header;

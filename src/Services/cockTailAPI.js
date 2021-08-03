@@ -6,6 +6,7 @@ const COCK_TAIL_DETAILS = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.ph
 const COCK_TAILS_DEFAULT = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
 const COCK_TAILS_RANDOM = 'https://www.thecocktaildb.com/api/json/v1/1/random.php';
 const COCK_TAILS_CATEGORY = 'https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=';
+const COCK_TAILS_INGREDIENTS = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list';
 
 export const getCockTailsDataByFilter = async (ingredient) => {
   const response = await fetch(`${COCK_TAIL_FILTER_API}${ingredient}`);
@@ -55,12 +56,19 @@ export const getRandomCockTails = async () => {
   return json.drinks[0].idDrink;
 };
 
+export const getCockTailsIngredients = async () => {
+  const response = await fetch(`${COCK_TAILS_INGREDIENTS}`);
+  const json = await response.json();
+  return json.drinks;
+};
+
 const requests = {
   getCockTailsDataByFilter,
   getCockTailsDataByName,
   getCockTailsDataByFirstLetter,
   getCockTailDetails,
   getRandomCockTails,
+  getCockTailsIngredients,
 };
 
 export default requests;

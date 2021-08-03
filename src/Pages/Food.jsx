@@ -1,15 +1,17 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import Card from '../Components/Card';
+
 import { fetchMealsAPI, fetchMealFilters } from '../Actions';
 import {
   getMealsDefault,
   getMealsFilters,
   getMealsByCategory,
+  getMealsDataByFilter,
 } from '../Services/mealAPI';
 import '../css/Food.css';
 
@@ -17,11 +19,15 @@ function Food() {
   const [data, setData] = React.useState();
   const [filters, setFilters] = React.useState();
   const [selected, setSelected] = React.useState();
+
+  const location = useLocation();
   const dispatch = useDispatch();
   const globalState = useSelector(({ foods }) => foods);
 
   React.useEffect(() => {
-    dispatch(fetchMealsAPI(getMealsDefault));
+    if (location.state) dispatch(fetchMealsAPI(getMealsDataByFilter, location.state));
+    else dispatch(fetchMealsAPI(getMealsDefault));
+
     dispatch(fetchMealFilters(getMealsFilters));
   }, []);
 

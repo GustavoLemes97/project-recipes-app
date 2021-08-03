@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
@@ -132,9 +133,11 @@ function DrinkProcess() {
 
       <p data-testid="instructions">{strInstructions}</p>
 
-      <button type="button" data-testid="finish-recipe-btn">
-        Finalizar
-      </button>
+      <Link to="/receitas-feitas">
+        <button type="button" data-testid="finish-recipe-btn">
+          Finalizar
+        </button>
+      </Link>
     </div>
   );
 }

@@ -1,38 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+
+import {
+  checkedIngredient,
+  changeIngredients,
+  changeFavorite,
+  copyToClipBoard,
+  saveProgressInLocalStorage,
+} from '../functions/Food/DrinkProcess';
+
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import '../css/FoodProcess.css';
-
-function checkedIngredient(
-  { target: { checked, parentNode } },
-  setIngredients,
-  verify,
-  ingredient,
-) {
-  if (checked) {
-    parentNode.style.textDecoration = 'line-through';
-  } else {
-    parentNode.style.textDecoration = 'none';
-  }
-  const checkIngredient = ingredient.map((ing) => {
-    if (parentNode.innerText === ing.ingredient) ing.checked = checked;
-    return ing;
-  });
-
-  setIngredients(checkIngredient);
-  verify();
-}
-
-function changeIngredients(setIngredients) {
-  const { pathname } = window.location;
-  const id = pathname.match(/\d+/)[0];
-
-  const store = JSON.parse(localStorage.getItem('inProgressRecipes'));
-  if (store && store.meals[id]) {
-    setIngredients(store.meals[id]);
-  }
-}
 
 function FoodProcess() {
   const [data, setData] = React.useState('');
@@ -42,14 +21,14 @@ function FoodProcess() {
   const [disabled, setDisabled] = React.useState(true);
 
   React.useEffect(() => {
-    const { pathname } = window.location;
-    const id = pathname.match(/\d+/)[0];
-    const store = JSON.parse(localStorage.getItem('favoriteRecipes'));
-    if (store) {
-      const actualFood = store.find((item) => item.id === id);
-      if (actualFood) setFavorited(true);
-    }
+    changeFavorite(setFavorited);
   }, []);
+
+  function verifyAllInputs() {
+    const settingDisabled = ingredient.every(({ checked }) => checked);
+    setDisabled(!settingDisabled);
+    saveProgressInLocalStorage('meals', ingredient);
+  }
 
   async function fetchMeal(id) {
     const response = await fetch(
@@ -61,47 +40,14 @@ function FoodProcess() {
     const filteredIngredients = Object.entries(json.meals[0]).filter(
       (arr) => arr[0].includes('Ingredient') && arr[1],
     );
+
     const ingredients = filteredIngredients.map((ing) => ({
       ingredient: ing[1],
       checked: false,
     }));
 
     setIngredients(ingredients);
-    changeIngredients(setIngredients);
-  }
-
-  function copyToClipBoard() {
-    const { pathname } = window.location;
-    navigator.clipboard.writeText(
-      `http://localhost:3000${pathname.replace(/\/in-progress/, '')}`,
-    );
-    setCopiedLink(true);
-  }
-
-  function saveProgressInLocalStorage() {
-    const { pathname } = window.location;
-    const id = pathname.match(/\d+/)[0];
-    const store = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    if (store) {
-      store.meals[id] = ingredient;
-      localStorage.setItem('inProgressRecipes', JSON.stringify(store));
-    } else {
-      localStorage.setItem(
-        'inProgressRecipes',
-        JSON.stringify({
-          cocktails: {},
-          meals: {
-            [id]: ingredient,
-          },
-        }),
-      );
-    }
-  }
-
-  function verifyAllInputs() {
-    const settingDisabled = ingredient.every(({ checked }) => checked);
-    setDisabled(!settingDisabled);
-    saveProgressInLocalStorage();
+    changeIngredients(setIngredients, 'meals');
   }
 
   React.useEffect(() => {
@@ -111,7 +57,7 @@ function FoodProcess() {
   }, []);
 
   React.useEffect(() => {
-    changeIngredients(setIngredients);
+    changeIngredients(setIngredients, 'meals');
   }, []);
 
   if (!data) return <p>Loading...</p>;
@@ -158,7 +104,11 @@ function FoodProcess() {
       />
       <h1 data-testid="recipe-title">{strMeal}</h1>
 
-      <button onClick={ copyToClipBoard } type="button" data-testid="share-btn">
+      <button
+        onClick={ () => copyToClipBoard(setCopiedLink) }
+        type="button"
+        data-testid="share-btn"
+      >
         COMPARTILHAR
       </button>
       {copiedLink && <p>Link copiado!</p>}
@@ -172,9 +122,10 @@ function FoodProcess() {
       </button>
 
       <p data-testid="recipe-category">{`Category: ${strCategory}`}</p>
-
+      {console.log(ingredient)}
       {ingredient.map(({ ingredient: ingred, checked }, index) => (
         <label
+          style={ checked ? { textDecoration: 'line-through' } : null }
           key={ index }
           data-testid={ `${index}-ingredient-step` }
           htmlFor={ ingred }
@@ -182,7 +133,9 @@ function FoodProcess() {
           {ingred}
           <input
             defaultChecked={ checked }
-            onClick={ (e) => checkedIngredient(e, setIngredients, verifyAllInputs, ingredient) }
+            onClick={ (e) => checkedIngredient(
+              e, setIngredients, verifyAllInputs, ingredient,
+            ) }
             type="checkbox"
             id={ ingred }
           />

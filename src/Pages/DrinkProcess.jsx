@@ -15,12 +15,22 @@ function checkedIngredient(
     parentNode.style.textDecoration = 'none';
   }
   const checkIngredient = ingredient.map((ing) => {
-    if (parentNode.innerText === ing.ingredient) ing.checked = true;
+    if (parentNode.innerText === ing.ingredient) ing.checked = checked;
     return ing;
   });
 
   setIngredients(checkIngredient);
   verify();
+}
+
+function changeIngredients(setIngredients) {
+  const { pathname } = window.location;
+  const id = pathname.match(/\d+/)[0];
+
+  const store = JSON.parse(localStorage.getItem('inProgressRecipes'));
+  if (store && store.cocktails[id]) {
+    setIngredients(store.cocktails[id]);
+  }
 }
 
 function DrinkProcess() {
@@ -40,9 +50,30 @@ function DrinkProcess() {
     }
   }, []);
 
+  function saveProgressInLocalStorage() {
+    const { pathname } = window.location;
+    const id = pathname.match(/\d+/)[0];
+    const store = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    if (store) {
+      store.cocktails[id] = ingredient;
+      localStorage.setItem('inProgressRecipes', JSON.stringify(store));
+    } else {
+      localStorage.setItem(
+        'inProgressRecipes',
+        JSON.stringify({
+          cocktails: {
+            [id]: ingredient,
+          },
+          meals: {},
+        }),
+      );
+    }
+  }
+
   function verifyAllInputs() {
     const settingDisabled = ingredient.every(({ checked }) => checked);
     setDisabled(!settingDisabled);
+    saveProgressInLocalStorage();
   }
 
   async function fetchMeal(id) {
@@ -55,11 +86,13 @@ function DrinkProcess() {
     const filteredIngredients = Object.entries(json.drinks[0]).filter(
       (arr) => arr[0].includes('Ingredient') && arr[1],
     );
+
     const ingredients = filteredIngredients.map((ing) => ({
       ingredient: ing[1],
       checked: false,
     }));
     setIngredients(ingredients);
+    changeIngredients(setIngredients);
   }
 
   React.useEffect(() => {
@@ -75,6 +108,10 @@ function DrinkProcess() {
     );
     setCopiedLink(true);
   }
+
+  React.useEffect(() => {
+    changeIngredients(setIngredients);
+  }, []);
 
   if (!data) return <p>Loading...</p>;
 
@@ -137,7 +174,7 @@ function DrinkProcess() {
 
       <p data-testid="recipe-category">{`Category: ${strCategory}`}</p>
 
-      {ingredient.map(({ ingredient: ingr }, index) => (
+      {ingredient.map(({ ingredient: ingr, checked }, index) => (
         <label
           key={ index }
           data-testid={ `${index}-ingredient-step` }
@@ -145,8 +182,9 @@ function DrinkProcess() {
         >
           {ingr}
           <input
+            defaultChecked={ checked }
             onClick={ (e) => checkedIngredient(
-              e, setIngredients, verifyAllInputs, ingredient,
+              e, setIngredients, verifyAllInputs, ingredient
             ) }
             type="checkbox"
             id={ ingr }

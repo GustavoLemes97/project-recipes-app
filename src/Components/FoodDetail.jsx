@@ -9,10 +9,31 @@ import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
+function localStorageHandle(func, id, storageName) {
+  const favoriteRecipes = JSON.parse(localStorage.getItem(storageName));
+
+  if (favoriteRecipes) {
+    const actualRecipe = favoriteRecipes.find(({ id: ID }) => ID === id);
+
+    if (actualRecipe) {
+      func(true);
+    }
+  }
+}
+
+function handleInProgressRecipe(func, id) {
+  const store = JSON.parse(localStorage.getItem('inProgressRecipes'));
+  if (store && store.meals[id]) {
+    func(true);
+  }
+}
+
 function FoodDetail({ meal, id }) {
   const [drink, setDrinks] = React.useState('');
   const [copiedLink, setCopiedLink] = React.useState(false);
   const [favorited, setFavorited] = React.useState(false);
+  const [doneRecipe, setDoneRecipe] = React.useState(false);
+  const [progressRecipe, setProgressRecipe] = React.useState(false);
 
   const {
     strMealThumb,
@@ -31,15 +52,15 @@ function FoodDetail({ meal, id }) {
   }, []);
 
   React.useEffect(() => {
-    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    localStorageHandle(setDoneRecipe, id, 'doneRecipes');
+  }, []);
 
-    if (favoriteRecipes) {
-      const actualRecipe = favoriteRecipes.find(({ id: ID }) => ID === id);
+  React.useEffect(() => {
+    handleInProgressRecipe(setProgressRecipe, id);
+  }, []);
 
-      if (actualRecipe) {
-        setFavorited(true);
-      }
-    }
+  React.useEffect(() => {
+    localStorageHandle(setFavorited, id, 'favoriteRecipes');
   }, []);
 
   React.useEffect(() => {
@@ -153,15 +174,17 @@ function FoodDetail({ meal, id }) {
           )}
       </div>
 
-      <Link to={ `/comidas/${id}/in-progress` }>
-        <button
-          data-testid="start-recipe-btn"
-          className="start-recipe-button"
-          type="button"
-        >
-          Iniciar Receita
-        </button>
-      </Link>
+      {!doneRecipe && (
+        <Link to={ `/comidas/${id}/in-progress` }>
+          <button
+            data-testid="start-recipe-btn"
+            className="start-recipe-button"
+            type="button"
+          >
+            {progressRecipe ? 'Continuar Receita' : 'Iniciar Receita'}
+          </button>
+        </Link>
+      )}
     </div>
   );
 }

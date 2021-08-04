@@ -26,7 +26,7 @@ function MadeRecipes() {
   }
 
   if (!recipes) {
-    return <div />;
+    return <Header pageTitle="Receitas Feitas" />;
   }
 
   return (

@@ -6,6 +6,8 @@ import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import { getItemLocalStorage, removeToFavorite } from '../Services/storage';
 
+import '../css/FavoritesRecipes.css';
+
 function FavoritesRecipes() {
   const [filter, setFilter] = useState('');
   const [copy, setCopy] = useState(false);
@@ -66,6 +68,7 @@ function FavoritesRecipes() {
             <div key={ name }>
               <Link to={ `/${type}s/${id}` } key={ name }>
                 <img
+                  className="recipe-favorite"
                   data-testid={ `${index}-horizontal-image` }
                   src={ image }
                   alt={ name }

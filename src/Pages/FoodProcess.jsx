@@ -61,6 +61,7 @@ function FoodProcess() {
   }, []);
 
   if (!data) return <p>Loading...</p>;
+  console.log(data);
 
   const {
     strMealThumb,
@@ -69,6 +70,7 @@ function FoodProcess() {
     strInstructions,
     strArea,
     idMeal,
+    strTags,
   } = data;
 
   function favoriteRecipe() {
@@ -84,7 +86,10 @@ function FoodProcess() {
     };
     if (store) {
       const addFavoriteRecipe = [...store, newFavoriteRecipe];
-      localStorage.setItem('favoriteRecipes', JSON.stringify(addFavoriteRecipe));
+      localStorage.setItem(
+        'favoriteRecipes',
+        JSON.stringify(addFavoriteRecipe),
+      );
     } else {
       localStorage.setItem(
         'favoriteRecipes',
@@ -92,6 +97,32 @@ function FoodProcess() {
       );
     }
     setFavorited(!favorited);
+  }
+
+  function doneRecipes() {
+    const currentDate = new Date().toLocaleDateString('PT-BR');
+    const localStorageData = JSON.parse(localStorage.getItem('doneRecipes'));
+    let tags = strTags;
+    if (tags === null) {
+      tags = '';
+    }
+    const finishLocalStorage = {
+      id: idMeal,
+      type: 'comida',
+      area: strArea,
+      category: strCategory,
+      alcoholicOrNot: '',
+      name: strMeal,
+      image: strMealThumb,
+      doneDate: currentDate,
+      tags: [tags],
+    };
+    if (localStorageData) {
+      const addFinishRecipes = [...localStorageData, finishLocalStorage];
+      localStorage.setItem('doneRecipes', JSON.stringify(addFinishRecipes));
+    } else {
+      localStorage.setItem('doneRecipes', JSON.stringify([finishLocalStorage]));
+    }
   }
 
   return (
@@ -148,6 +179,7 @@ function FoodProcess() {
         <button
           disabled={ disabled }
           type="button"
+          onClick={ doneRecipes }
           data-testid="finish-recipe-btn"
         >
           Finalizar

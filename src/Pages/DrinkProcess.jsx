@@ -68,7 +68,9 @@ function DrinkProcess() {
     strInstructions,
     idDrink,
     strAlcoholic,
+    strTags,
   } = data;
+  console.log(data);
 
   function favoriteRecipe() {
     const store = JSON.parse(localStorage.getItem('favoriteRecipes'));
@@ -92,6 +94,32 @@ function DrinkProcess() {
       );
     }
     setFavorited(!favorited);
+  }
+
+  function doneRecipes() {
+    const currentDate = new Date().toLocaleDateString('PT-BR');
+    const localStorageData = JSON.parse(localStorage.getItem('doneRecipes'));
+    let tags = strTags;
+    if (tags === null) {
+      tags = '';
+    }
+    const finishLocalStorage = {
+      id: idDrink,
+      type: 'bebida',
+      area: '',
+      category: strCategory,
+      alcoholicOrNot: strAlcoholic,
+      name: strDrink,
+      image: strDrinkThumb,
+      doneDate: currentDate,
+      tags: [tags],
+    };
+    if (localStorageData) {
+      const addFinishRecipes = [...localStorageData, finishLocalStorage];
+      localStorage.setItem('doneRecipes', JSON.stringify(addFinishRecipes));
+    } else {
+      localStorage.setItem('doneRecipes', JSON.stringify([finishLocalStorage]));
+    }
   }
 
   return (
@@ -150,6 +178,7 @@ function DrinkProcess() {
           disabled={ disabled }
           type="button"
           data-testid="finish-recipe-btn"
+          onClick={ doneRecipes }
         >
           Finalizar
         </button>

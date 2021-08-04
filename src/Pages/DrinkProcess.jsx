@@ -1,27 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+
+import {
+  checkedIngredient,
+  changeIngredients,
+  changeFavorite,
+  copyToClipBoard,
+  saveProgressInLocalStorage,
+} from '../functions/Food/DrinkProcess';
+
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
-
-function checkedIngredient(
-  { target: { checked, parentNode } },
-  setIngredients,
-  verify,
-  ingredient,
-) {
-  if (checked) {
-    parentNode.style.textDecoration = 'line-through';
-  } else {
-    parentNode.style.textDecoration = 'none';
-  }
-  const checkIngredient = ingredient.map((ing) => {
-    if (parentNode.innerText === ing.ingredient) ing.checked = true;
-    return ing;
-  });
-
-  setIngredients(checkIngredient);
-  verify();
-}
 
 function DrinkProcess() {
   const [data, setData] = React.useState('');
@@ -31,21 +20,16 @@ function DrinkProcess() {
   const [disabled, setDisabled] = React.useState(true);
 
   React.useEffect(() => {
-    const { pathname } = window.location;
-    const id = pathname.match(/\d+/)[0];
-    const store = JSON.parse(localStorage.getItem('favoriteRecipes'));
-    if (store) {
-      const actualFood = store.find((item) => item.id === id);
-      if (actualFood) setFavorited(true);
-    }
+    changeFavorite(setFavorited);
   }, []);
 
   function verifyAllInputs() {
     const settingDisabled = ingredient.every(({ checked }) => checked);
     setDisabled(!settingDisabled);
+    saveProgressInLocalStorage('cocktails', ingredient);
   }
 
-  async function fetchMeal(id) {
+  async function fetchDrink(id) {
     const response = await fetch(
       `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`,
     );
@@ -55,26 +39,25 @@ function DrinkProcess() {
     const filteredIngredients = Object.entries(json.drinks[0]).filter(
       (arr) => arr[0].includes('Ingredient') && arr[1],
     );
+
     const ingredients = filteredIngredients.map((ing) => ({
       ingredient: ing[1],
       checked: false,
     }));
+
     setIngredients(ingredients);
+    changeIngredients(setIngredients, 'cocktails');
   }
 
   React.useEffect(() => {
     const { pathname } = window.location;
     const id = pathname.match(/\d+/)[0];
-    fetchMeal(id);
+    fetchDrink(id);
   }, []);
 
-  function copyToClipBoard() {
-    const { pathname } = window.location;
-    navigator.clipboard.writeText(
-      `http://localhost:3000${pathname.replace(/\/in-progress/, '')}`,
-    );
-    setCopiedLink(true);
-  }
+  React.useEffect(() => {
+    changeIngredients(setIngredients, 'cocktails');
+  }, []);
 
   if (!data) return <p>Loading...</p>;
 
@@ -121,7 +104,11 @@ function DrinkProcess() {
       />
       <h1 data-testid="recipe-title">{strDrink}</h1>
 
-      <button onClick={ copyToClipBoard } type="button" data-testid="share-btn">
+      <button
+        onClick={ () => copyToClipBoard(setCopiedLink) }
+        type="button"
+        data-testid="share-btn"
+      >
         COMPARTILHAR
       </button>
 
@@ -137,19 +124,21 @@ function DrinkProcess() {
 
       <p data-testid="recipe-category">{`Category: ${strCategory}`}</p>
 
-      {ingredient.map(({ ingredient: ingr }, index) => (
+      {ingredient.map(({ ingredient: ingred, checked }, index) => (
         <label
+          style={ checked ? { textDecoration: 'line-through' } : null }
           key={ index }
           data-testid={ `${index}-ingredient-step` }
-          htmlFor={ ingr }
+          htmlFor={ ingred }
         >
-          {ingr}
+          {ingred}
           <input
+            defaultChecked={ checked }
             onClick={ (e) => checkedIngredient(
               e, setIngredients, verifyAllInputs, ingredient,
             ) }
             type="checkbox"
-            id={ ingr }
+            id={ ingred }
           />
         </label>
       ))}
